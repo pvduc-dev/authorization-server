@@ -11,11 +11,19 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+
   jmx:
     enabled: false
   datasource:
-    url: ${MYSQL_URL}
+    url: jdbc:postgresql://containers-us-west-16.railway.app:6328/railway?&serverTimezone=UTC
+    username: postgres
+    password: mge4qjpxF1VYcvqxBaqr
 
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            client-id: 477199117227873
+            client-secret: 78e18b373864ac09ae35c0bff958bc58
+            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"

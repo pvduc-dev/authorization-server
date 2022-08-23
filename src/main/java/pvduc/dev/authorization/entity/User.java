@@ -1,13 +1,17 @@
 package pvduc.dev.authorization.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.validation.constraints.Email;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -16,19 +20,43 @@ import java.util.UUID;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@Table(
+	name = "users",
+	uniqueConstraints = {
+		@UniqueConstraint(columnNames = "email")
+	}
+)
 public class User {
 	@Id
-	@Type(type="uuid-char")
+	@Column(columnDefinition = "UUID default gen_random_uuid()")
 	private UUID id;
 
 	@NotNull
+	@Column(name = "email", nullable = false)
 	private String email;
+
+	private String password;
+
+	@Column(columnDefinition = "boolean default true")
+	private Boolean isEnable;
+
+	@Column(columnDefinition = "boolean default false")
+	private Boolean isEmailVerified;
 
 	private String firstName;
 
 	private String lastName;
 
-	private String avatar;
+	private String avatarUrl;
+
+	@Column(nullable = false, updatable = false, insertable = false)
+	@CreationTimestamp
+	private Timestamp createdAt;
+
+	@Column(nullable = false, updatable = false, insertable = false)
+	@UpdateTimestamp
+	private Timestamp updatedAt;
+
 
 	@Override
 	public boolean equals(Object o) {
